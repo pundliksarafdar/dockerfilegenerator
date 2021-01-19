@@ -1,16 +1,40 @@
-
-$(document).ready(function(){
-   $(document).find("#generateDockerFIle").bind("click",generateDockerFile)
+$(document).ready(function () {
+    $(document).find("#generateDockerFIle").bind("click", generateDockerFile);
+    $(document).find("#buildAndDeployDocker").bind("click", buildAndDeployDocker);
     checkPrerequisite();
+    attachBuildScriptListenr();
 });
+
+function attachBuildScriptListenr(){
+    var url = location.origin;
+    url = url.replace("http://","ws://");
+    var ws = new WebSocket(url+"/build_messages");
+    ws.onmessage = function(message){
+        $("#dockerBuildCommandResponse").append(message.data+"\n");
+    }
+}
+
+function buildAndDeployDocker() {
+    $("#dockerBuildCommandResponse").empty();
+    var dockerFileContent = $(document).find("#dockerFileContent").val();
+    var imageName = $(document).find("#buildImageName").val();
+    var tagName = $(document).find("#buildImageTag").val();
+    var dataToPost = {dockerFileContent:dockerFileContent, imageName:imageName, tag:tagName};
+    var rUtil = new RestUtil();
+    rUtil.postData("/build", JSON.stringify(dataToPost), function (data) {
+        console.log("Success", data);
+    }, function () {
+        console.log("Error");
+    });
+}
 
 function generateDockerFile() {
     var data = $(document).find("form#generationForm").serializeArray();
     var dataToPost = {};
-    for (var d in data){
-        if (data[d].value === "on"){
+    for (var d in data) {
+        if (data[d].value === "on") {
             dataToPost[data[d].name] = true;
-        }else{
+        } else {
             dataToPost[data[d].name] = data[d].value;
         }
     }
@@ -24,22 +48,22 @@ function generateDockerFile() {
     });
 }
 
-function checkPrerequisite(){
+function checkPrerequisite() {
     var rUtil = new RestUtil();
-    rUtil.getData("/prerequisite",function (data) {
-           console.log(data);
-           if (!data.docker){
-               $("#prerequisiteAlert").append("Docker is not installed please install docker on server").show();
-           }
+    rUtil.getData("/prerequisite", function (data) {
+        console.log(data);
+        if (!data.docker) {
+            $("#prerequisiteAlert").append("Docker is not installed please install docker on server").show();
+        }
 
-           if(!data.git){
-               $("#prerequisiteAlert").append("Git is not installed please install git on server").show();
-           }
+        if (!data.git) {
+            $("#prerequisiteAlert").append("Git is not installed please install git on server").show();
+        }
 
-           if(data.docker && data.git){
-               $("#prerequisiteAlert").hide();
-           }
-    },function () {
+        if (data.docker && data.git) {
+            $("#prerequisiteAlert").hide();
+        }
+    }, function () {
 
     })
 }

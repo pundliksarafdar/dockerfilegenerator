@@ -40,10 +40,10 @@ public class TemplateController {
     }
 
     @PostMapping("/build")
-    public Response buildAndDeployDocker(DockerBuild build){
+    public Response buildAndDeployDocker(@RequestBody DockerBuild build){
         Response response = new Response();
         response.setStatus(200);
-
+        TemplateGenerationExecutor.createAndBuildDocker(build);
         return response;
     }
 }

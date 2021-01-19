@@ -2,13 +2,14 @@ package com.tmpl.executor;
 
 import com.tmpl.docker1.bean.DockerBuild;
 import com.tmpl.docker1.bean.GenerateArrib;
+import com.tmpl.docker1.controller.MessageController;
 import com.tmpl.utils.TemplateUtils;
 
 import java.io.*;
 import java.util.List;
 
 public class TemplateGenerationExecutor {
-    static String dockerFile = "D:\\Dockerfile";
+    static String dockerFile = "Dockerfile";
     public static String generateDockerFile(GenerateArrib arrib) {
         List<String> packageList = TemplateUtils.getPackageToInstall(arrib);
         boolean success = openFile();
@@ -80,7 +81,7 @@ public class TemplateGenerationExecutor {
     //Creating docker file
     public static boolean openFile() {
         try {
-            File myObj = new File("D:\\Dockerfile");
+            File myObj = new File(TemplateGenerationExecutor.dockerFile);
             if (myObj.exists()) {
                 myObj.delete();
             }
@@ -122,5 +123,14 @@ public class TemplateGenerationExecutor {
 
     public static void createAndBuildDocker(DockerBuild dockerBuild){
         rewriteDockerFile(dockerBuild);
+        MessageController controller = new MessageController();
+        try {
+            boolean isBuildSuccessfull = CommandExecutor.executeCommand("docker build -t test:latest .", controller);
+            if (isBuildSuccessfull){
+                //CommandExecutor.executeCommand()
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
