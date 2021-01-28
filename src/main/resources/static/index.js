@@ -29,6 +29,7 @@ function buildAndDeployDocker() {
 }
 
 function generateDockerFile() {
+    $("#dockerBuildCommandResponse").empty();
     var data = $(document).find("form#generationForm").serializeArray();
     var dataToPost = {};
     for (var d in data) {

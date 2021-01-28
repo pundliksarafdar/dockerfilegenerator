@@ -4,6 +4,7 @@ import com.tmpl.docker1.bean.DockerBuild;
 import com.tmpl.docker1.bean.GenerateArrib;
 import com.tmpl.docker1.controller.MessageController;
 import com.tmpl.utils.TemplateUtils;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 
 import java.io.*;
 import java.util.List;
@@ -12,6 +13,13 @@ public class TemplateGenerationExecutor {
     static String dockerFile = "Dockerfile";
     public static String generateDockerFile(GenerateArrib arrib) {
         List<String> packageList = TemplateUtils.getPackageToInstall(arrib);
+        List<String> featureInfoList = TemplateUtils.getFeatureToInstall(arrib);
+
+        if(arrib.getSource() != null || arrib.getSource() == ""){
+            checkoutGitCode(arrib.getSource());
+        }
+        //Check out git directory
+
         boolean success = openFile();
         if (success) {
             FileWriter writter = getFileWritter(dockerFile);
@@ -21,12 +29,16 @@ public class TemplateGenerationExecutor {
                     writter.append(String.format("FROM %s:%s\n", arrib.getImageName(), arrib.getImageVersion()));
 
                     writter.append(String.format("RUN apt-get install\n"));
+
+                    //Install feature
+                    for(String feature : featureInfoList){
+                        writter.append(String.format("RUN apt-get install %s\n", feature));
+                    }
+
                     //Install package
                     for(String packageInstall : packageList){
                         writter.append(String.format("RUN apt-get install %s\n", packageInstall));
                     }
-
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }finally {
@@ -129,6 +141,22 @@ public class TemplateGenerationExecutor {
             if (isBuildSuccessfull){
                 //CommandExecutor.executeCommand()
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void checkoutGitCode(String gitUrl){
+        MessageController controller = new MessageController();
+        try {
+            File file = new File("gitsrc");
+            if(file.exists()){
+                FileUtils.deleteDirectory(file);
+            }
+            file.mkdirs();
+            String gitSorucePath = file.getAbsolutePath();
+            String gitCmd = String.format("git clone %s %s",gitUrl, gitSorucePath);
+            boolean isBuildSuccessfull = CommandExecutor.executeCommand(gitCmd, controller);
         } catch (IOException e) {
             e.printStackTrace();
         }

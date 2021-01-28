@@ -1,5 +1,6 @@
 package com.tmpl.docker1.bean;
 
+import com.tmpl.anotations.FeatureInfo;
 import com.tmpl.anotations.PackageInfo;
 
 public class GenerateArrib {
@@ -18,8 +19,11 @@ public class GenerateArrib {
     public boolean robotFramework;
 
     //Feature
+    @FeatureInfo(featureName = "TESTNG")
     public boolean testNg;
+    @FeatureInfo(featureName = "MAVEN")
     public boolean maven;
+    @FeatureInfo(featureName = "EXTENT_REPORT")
     public boolean extentReport;
 
     public String source;
