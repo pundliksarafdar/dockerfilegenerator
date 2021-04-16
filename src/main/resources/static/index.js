@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $(document).find("#generateDockerFIle").bind("click", generateDockerFile);
     $(document).find("#buildAndDeployDocker").bind("click", buildAndDeployDocker);
+    $(document).find("#generateDockerCompose").bind("click", generateDockerComposeFile);
     checkPrerequisite();
     attachBuildScriptListenr();
 });
@@ -42,6 +43,27 @@ function generateDockerFile() {
     console.log(dataToPost);
     var rUtil = new RestUtil();
     rUtil.postData("/generator", JSON.stringify(dataToPost), function (data) {
+        console.log("Success", data);
+        $("#dockerFileContent").val(data.dockerFile);
+    }, function () {
+        console.log("Error");
+    });
+}
+
+function generateDockerComposeFile() {
+    $("#dockerBuildCommandResponse").empty();
+    var data = $(document).find("form#generationForm").serializeArray();
+    var dataToPost = {};
+    for (var d in data) {
+        if (data[d].value === "on") {
+            dataToPost[data[d].name] = true;
+        } else {
+            dataToPost[data[d].name] = data[d].value;
+        }
+    }
+    console.log(dataToPost);
+    var rUtil = new RestUtil();
+    rUtil.postData("/generator_compose", JSON.stringify(dataToPost), function (data) {
         console.log("Success", data);
         $("#dockerFileContent").val(data.dockerFile);
     }, function () {

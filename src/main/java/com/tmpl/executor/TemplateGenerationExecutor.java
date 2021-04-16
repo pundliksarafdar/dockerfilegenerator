@@ -15,7 +15,7 @@ public class TemplateGenerationExecutor {
         List<String> packageList = TemplateUtils.getPackageToInstall(arrib);
         List<String> featureInfoList = TemplateUtils.getFeatureToInstall(arrib);
 
-        if(arrib.getSource() != null || arrib.getSource() == ""){
+        if(arrib.getSource() != null && !arrib.getSource().trim().equals("")){
             checkoutGitCode(arrib.getSource());
         }
         //Check out git directory
