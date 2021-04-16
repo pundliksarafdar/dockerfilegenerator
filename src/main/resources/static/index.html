@@ -35,7 +35,7 @@
     Checking prerequisite
 </div>
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
 
         <form class="form-inline" id="generationForm">
             <div>
@@ -47,7 +47,8 @@
                     </div>
                     <div class="input-group">
                         <div class="input-group-addon">Version</div>
-                        <input type="text" class="form-control" id="imageVersion" placeholder="latest" value="latest" name="imageVersion"/>
+                        <input type="text" class="form-control" id="imageVersion" placeholder="latest" value="latest"
+                               name="imageVersion"/>
                     </div>
                 </div>
             </div>
@@ -57,16 +58,24 @@
                 <h4> Select list of packages need to be installed </h4>
                 <div>
                     <ul class="list-group">
-                        <li class="list-group-item"><input type="checkbox" name="selenium" id="selenium" name="selenium"> <label
+                        <li class="list-group-item"><input type="checkbox" name="selenium" id="selenium"
+                                                           name="selenium"> <label
                                 for="selenium">&nbsp;Selenium</label></li>
-                        <li class="list-group-item"><input type="checkbox" name="nose" id="nose"> <label for="nose" name="nose">&nbsp;Nose</label></li>
-                        <li class="list-group-item"><input type="checkbox" name="clipboard" id="clipboard" name="clipboard"> <label for="clipboard">&nbsp;Cipboard</label>
+                        <li class="list-group-item"><input type="checkbox" name="nose" id="nose"> <label for="nose"
+                                                                                                         name="nose">&nbsp;Nose</label>
                         </li>
-                        <li class="list-group-item"><input type="checkbox" name="config" id="config" name="config"> <label for="config">&nbsp;Config</label>
+                        <li class="list-group-item"><input type="checkbox" name="clipboard" id="clipboard"
+                                                           name="clipboard"> <label
+                                for="clipboard">&nbsp;Cipboard</label>
                         </li>
-                        <li class="list-group-item"><input type="checkbox" name="requests" id="requests" name="requests"> <label
+                        <li class="list-group-item"><input type="checkbox" name="config" id="config" name="config">
+                            <label for="config">&nbsp;Config</label>
+                        </li>
+                        <li class="list-group-item"><input type="checkbox" name="requests" id="requests"
+                                                           name="requests"> <label
                                 for="requests">&nbsp;Requests</label></li>
-                        <li class="list-group-item"><input type="checkbox" name="robotframeword" id="robotframeword"  name="robotFramework"> <label
+                        <li class="list-group-item"><input type="checkbox" name="robotframeword" id="robotframeword"
+                                                           name="robotFramework"> <label
                                 for="robotframeword">&nbsp;Robot frameword</label></li>
                     </ul>
                 </div>
@@ -76,10 +85,13 @@
                 <h4> Select list of feature intall on top of base image </h4>
                 <div>
                     <ul class="list-group">
-                        <li class="list-group-item"><input type="checkbox" name="testng" id="testng" name="testNg"> <label for="testng" >&nbsp;TestNG</label>
+                        <li class="list-group-item"><input type="checkbox" name="testng" id="testng" name="testNg">
+                            <label for="testng">&nbsp;TestNG</label>
                         </li>
-                        <li class="list-group-item"><input type="checkbox" name="maven" id="maven" name="maven"> <label for="maven">&nbsp;Maven</label></li>
-                        <li class="list-group-item"><input type="checkbox" name="extendReport" id="extendReport" name="extentReport"> <label for="extendReport">&nbsp;Extend
+                        <li class="list-group-item"><input type="checkbox" name="maven" id="maven" name="maven"> <label
+                                for="maven">&nbsp;Maven</label></li>
+                        <li class="list-group-item"><input type="checkbox" name="extendReport" id="extendReport"
+                                                           name="extentReport"> <label for="extendReport">&nbsp;Extend
                             Report</label></li>
                     </ul>
                 </div>
@@ -89,7 +101,7 @@
             <div>
                 <h3> Browser </h3>
                 <div>
-                    <select class="btn btn-success"  name="browser">
+                    <select class="btn btn-success" name="browser">
                         <option value="chrome">Chrome</option>
                         <option value="headlesschrome">Headless Chrome</option>
                     </select>
@@ -102,22 +114,42 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">Source code repo</div>
-                        <input type="text" class="form-control" id="sourceCodeRepo" placeholder="git url"  name="source">
+                        <input type="text" class="form-control" id="sourceCodeRepo" placeholder="git url" name="source">
                     </div>
                 </div>
             </div>
             <hr/>
             <div>
-                <input type="button" value="Generate docker" id="generateDockerFIle" class="btn btn-success">
+                <h3> Build path </h3>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">Build path for docker compose</div>
+                        <input type="text" class="form-control" id="docComposeBuildPath" placeholder="git url" value="."
+                               name="docComposeBuildPath">
+                    </div>
+                </div>
+            </div>
+            <div>
                 <input type="button" value="Generate docker compose" id="generateDockerCompose" class="btn btn-success">
             </div>
         </form>
     </div>
-    <div class="col-md-6">
-        <h3>Generated Docker file</h3>
-        <label> You can modify or update docker file here</label>
-        <textarea  class="form-control" rows="25" id="dockerFileContent"></textarea>
+    <div class="col-md-8">
+        <div style="display: flow-root;">
+            <h3>Generated Docker/Docker compose file</h3>
+            <div>
+                <div style="width: 48%; float: left;">
+                    <label> You can modify or update docker file here</label>
+                    <textarea class="form-control" rows="25" id="dockerFileContent"></textarea>
+                </div>
+                <div style="width: 48%; float: right;">
+                    <label> You can modify or update docker compose file here</label>
+                    <textarea class="form-control" rows="25" id="dockerComposeFileContent"></textarea>
+                </div>
+            </div>
+        </div>
         <hr/>
+        <div>
         <h3>Build and deploy docker</h3>
         <div class="form-group form-inline">
             <div class="input-group">
@@ -126,15 +158,17 @@
             </div>
             <div class="input-group">
                 <div class="input-group-addon">Image tag</div>
-                <input type="text" class="form-control" id="buildImageTag" placeholder="latest" value="latest" name="imageVersion"/>
+                <input type="text" class="form-control" id="buildImageTag" placeholder="latest" value="latest"
+                       name="imageVersion"/>
             </div>
+        </div>
         </div>
         <input type="button" class="btn btn-success" id="buildAndDeployDocker" value="Start"/>
         <hr/>
         <h3>Build logs</h3>
         <pre style="color: white;background: black" id="dockerBuildCommandResponse"></pre>
-    </input>
-</div>
+        </input>
+    </div>
 
 </body>
 </html>

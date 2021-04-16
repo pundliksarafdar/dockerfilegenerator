@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.tmpl.docker1.bean.DockerComposeAttrib;
 import com.tmpl.docker1.bean.GenerateArrib;
 import com.tmpl.docker1.bean.compose.DockerCompose;
 import com.tmpl.docker1.bean.compose.HTests;
@@ -15,15 +16,8 @@ import java.io.IOException;
 import java.util.List;
 
 public class DockerControlGenerationExecutor {
-    public static String generateDockerComposeFile(GenerateArrib arrib) throws IOException {
-        List<String> packageList = TemplateUtils.getPackageToInstall(arrib);
-        List<String> featureInfoList = TemplateUtils.getFeatureToInstall(arrib);
-
-        if(arrib.getSource() != null && !arrib.getSource().trim().equals("")){
-            TemplateGenerationExecutor.checkoutGitCode(arrib.getSource());
-        }
-
-        HTests hTests = new HTests(arrib.imageName, null, null);
+    public static String generateDockerComposeFile(DockerComposeAttrib attrib) throws IOException {
+        HTests hTests = new HTests(attrib.getImage(), attrib.getBuildPath());
         DockerCompose dockerCompose = new DockerCompose(hTests);
         Services services = new Services(dockerCompose);
 
@@ -34,8 +28,8 @@ public class DockerControlGenerationExecutor {
     }
 
     public static void main(String[] args) throws IOException {
-        GenerateArrib arrib = new GenerateArrib();
-        arrib.imageName = "testimage";
+        DockerComposeAttrib arrib = new DockerComposeAttrib();
+        arrib.setImage( "testimage");
         generateDockerComposeFile(arrib);
     }
 }

@@ -1,7 +1,8 @@
 $(document).ready(function () {
     $(document).find("#generateDockerFIle").bind("click", generateDockerFile);
     $(document).find("#buildAndDeployDocker").bind("click", buildAndDeployDocker);
-    $(document).find("#generateDockerCompose").bind("click", generateDockerComposeFile);
+
+    $(document).find("#generateDockerCompose").bind("click", buildDockerAndDockerCompose);
     checkPrerequisite();
     attachBuildScriptListenr();
 });
@@ -13,6 +14,11 @@ function attachBuildScriptListenr(){
     ws.onmessage = function(message){
         $("#dockerBuildCommandResponse").append(message.data+"\n");
     }
+}
+
+function buildDockerAndDockerCompose(){
+    generateDockerFile();
+    generateDockerComposeFile();
 }
 
 function buildAndDeployDocker() {
@@ -53,19 +59,11 @@ function generateDockerFile() {
 function generateDockerComposeFile() {
     $("#dockerBuildCommandResponse").empty();
     var data = $(document).find("form#generationForm").serializeArray();
-    var dataToPost = {};
-    for (var d in data) {
-        if (data[d].value === "on") {
-            dataToPost[data[d].name] = true;
-        } else {
-            dataToPost[data[d].name] = data[d].value;
-        }
-    }
-    console.log(dataToPost);
+    var dataToPost = {"imageName":"hackathon/python", "buildPath":$("#docComposeBuildPath").val()};
     var rUtil = new RestUtil();
     rUtil.postData("/generator_compose", JSON.stringify(dataToPost), function (data) {
         console.log("Success", data);
-        $("#dockerFileContent").val(data.dockerFile);
+        $("#dockerComposeFileContent").val(data.dockerFile);
     }, function () {
         console.log("Error");
     });

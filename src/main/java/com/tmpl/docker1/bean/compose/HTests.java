@@ -1,5 +1,6 @@
 package com.tmpl.docker1.bean.compose;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HTests {
@@ -9,11 +10,12 @@ public class HTests {
     List<String> environment;
     List<String> volumes;
 
-    public HTests(String image, List<String> depends_on,List<String> environment){
+    public HTests(String image, String buildPath){
         this.image = image;
-        this.depends_on = depends_on;
-        this.environment = environment;
-        this.build = ".";
+        this.depends_on = new ArrayList<String>(){{add("firefox");add("chrome");}};
+        this.environment = new ArrayList<String>(){{add("SELENIUM_GRID_URL=selenium-hub:4444");add("DOCKER_COMPOSE_WAIT=30");add("TESTS_TO_RUN=${TESTS_TO_RUN}");}};;
+        this.build = buildPath;
+        this.volumes = new ArrayList<String>(){{add(".:/tests");}};
     }
 
     public String getImage() {
